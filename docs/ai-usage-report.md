@@ -1,8 +1,8 @@
-# AI Usage Report - Assignment 2
+# AI Usage Report - Assignment 3
 
 **Student**: Hussain Albaggal  
 **Student ID**: s202253340  
-**Assignment**: SWE363 - Assignment 2 (Interactive Features)  
+**Assignment**: SWE363 - Assignment 3   
 **Date**: April 11, 2026
 
 ---
@@ -30,7 +30,7 @@
 ### Key Benefits
 - **Error Handling**: localStorage try/catch pattern prevents app crashes in restricted browsers
 - **User Experience**: AI suggested friendly error messages, to keep user/visitor satisfied
-- **Code Quality**: AI helped maintain and confirming to good code writing styles
+- **Code Quality**: AI helped maintain and confirming to good code writing styles, improved API requests
 - **Feature Coverage**: AI support made it faster to implement all rubric features in a consistent way
 
 ### Challenges Overcome
