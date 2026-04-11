@@ -1,117 +1,87 @@
 
 # Hussain Albaggal - Software Engineering Portfolio
-## **Assignment 2: Interactive Features**
 
-> A responsive and interactive personal portfolio showcasing dynamic content and modern web development practices.
+A responsive single-page portfolio for SWE363 Assignment 2. The site presents my profile, experience, projects, certifications, skills, and contact form while demonstrating interactive front-end features such as API integration, state management, complex client-side logic, and performance-minded UI behavior.
 
----
+## Project Description
 
-##  Project Overview
-This project is an evolution of my foundation portfolio (Assignment 1), now enhanced with interactive features and robust data handling. It serves as a professional showcase of my work as a Software Engineering student at King Fahd University of Petroleum and Minerals (KFUPM).
+This project extends my earlier portfolio into a more interactive web application using HTML, CSS, and vanilla JavaScript. It includes:
 
-##  Assignment 2 Requirements Checklist
-This project fulfills all criteria for Assignment 2 as follows:
+- A live weather section powered by the Open-Meteo API
+- Project filtering, sorting, and visitor-level based display
+- Persistent light/dark mode using `localStorage`
+- Show/hide section controls for state management
+- A visit timer and dynamic greeting
+- A contact form with stronger validation and user-friendly feedback
 
-| Requirement | Implementation Status | Features Added |
-| :--- | :---: | :--- |
-| **Dynamic Content** | ✅ | Time-based greeting & Real-time project category filtering |
-| **Data Handling** | ✅ | Persistent Dark/Light mode via `localStorage` & Regex form validation |
-| **Animations** | ✅ | Smooth section transitions, interactive card hovers, and theme fading |
-| **Error Handling** | ✅ | Inline form feedback & "No projects found" empty state for filtering |
-| **AI Integration** | ✅ | Documented workflow with GitHub Copilot and Claude AI |
+## Assignment Coverage
 
----
+This portfolio now covers the main Assignment 2 areas through visible and testable features:
 
-##  Tech Stack
-* **Structure:** Semantic HTML5 for improved accessibility and SEO
-* **Styling:** CSS3 Custom Properties (Variables) for the global theme engine and Flexbox for responsive design
----
+- Dynamic content and API integration: live weather data and time-based greeting
+- Complex logic: project filtering, sorting, visitor-level selection, and timer updates
+- State management: persistent theme mode and show/hide section buttons
+- Error handling: API fallback message, empty project state, and form validation feedback
+- Performance: reduced repeated DOM lookups, CSS-based section reveal, and lighter runtime updates
 
-##  Project Structure
-```text
-202253340-HussainAlbaggal-assignment2/
-├── README.md                      # Project documentation and guide
-├── index.html                     # Main entry point with semantic HTML5
-├── css/
-│   └── styles.css                 # Custom properties and responsive layout
-├── js/
-│   └── script.js                  # Filtering, theme, and validation logic
-├── docs/
-│   ├── ai-usage-report.md         # AI integration details
-│   └── technical-documentation.md # Feature logic and architecture
-└── .gitignore                     # Git exclusion rules
-````
+## Setup Instructions
 
------
+### Option 1: Open directly
 
-##  Installation & Running Locally
+Open `index.html` in a modern browser.
 
-### Prerequisites
-
-  * A modern web browser (Chrome, Firefox, Safari, or Edge).
-
-### Steps to Run
-
-**1. Clone the repository**
+### Option 2: Run with a local server
 
 ```bash
-git clone [https://github.com/Hoosn4/s202253340-HussainAlbaggal-assignment2.git](https://github.com/Hoosn4/s202253340-HussainAlbaggal-assignment2.git)
-cd s202253340-HussainAlbaggal-assignment2
-```
-
-**2. Open the project**
-
-  * **Directly:** Double-click `index.html` in your file explorer.
-  * **Local Server (Recommended):** Use a local server to ensure scripts load optimally:
-
-<!-- end list -->
-
-```bash
-# If you have Python installed:
 python -m http.server 8000
 ```
 
-Then visit: `http://localhost:8000`
+Then open `http://localhost:8000`.
 
------
+## Project Structure
 
-##  Interactive Features & User Guide
+```text
+202253340-HussainAlbaggal-assignment2/
+├── index.html
+├── css/
+│   └── styles.css
+├── js/
+│   └── script.js
+├── docs/
+│   ├── ai-usage-report.md
+│   └── technical-documentation.md
+└── README.md
+```
 
-### 1\. Persistent Theme Engine
+## Main Features
 
-  * **How to use:** Click the "🌙 Dark Mode" button in the sidebar.
-  * **Technical Detail:** Your preference is saved via the `localStorage` API. The site uses `try/catch` logic to prevent crashes if browser storage is restricted.
-    - This will let the browser save your theme preference
+- Dynamic content: time-based greeting, live temperature, and visit timer
+- API integration: current weather for Dhahran from Open-Meteo
+- Complex logic: project filtering, sorting, and visitor-level selection
+- State management: theme persistence and show/hide section controls
+- Error handling: weather fallback message, empty-state project message, and contact form validation
+- Performance: reduced repeated DOM lookups, CSS-based reveal animations, and section rendering optimization
 
-### 2\. Real-Time Project Filtering
+## How To Test
 
-  * **How to use:** Scroll to the Projects section and select "Web Development" or "Machine Learning."
-  * **UX Feedback:** Cards filter with a smooth fade animation.
+- Theme toggle: switch between light and dark mode, then refresh the page to confirm the theme stays saved
+- Weather section: check that the temperature appears, or a friendly fallback message appears if the API fails
+- Projects section: choose `Beginner` or `Advanced`, apply a category filter, and then change the sort option
+- Section visibility: click `Hide Weather Section` or `Hide Projects Section`, then show them again
+- Contact form: submit empty or invalid fields to see validation errors, then submit valid input to see the success message
 
-### 3\. Smart Contact Form
+## AI Use Summary
 
-  * **Validation:** The form uses Regex to verify email formats and ensures no fields are left empty.
-  * **User Feedback:** Provides immediate red error messages for invalid inputs and a green success message upon valid submission. Feedback clears automatically when you resume typing.
+AI tools were used to speed up implementation, improve validation logic, refine UI messaging, and support documentation. All generated suggestions were reviewed and adjusted manually before being kept in the project.
 
-### 4\. Time-Aware Greeting
+For the full explanation, see [docs/ai-usage-report.md](docs/ai-usage-report.md).
 
-  * **Interaction:** The header dynamically greets visitors (Morning / Afternoon / Evening) based on your system's current time.
+## Live Deployment
 
------
+No live deployment link is included yet.
 
-## 🤖 AI Integration Summary
+## Contact
 
-AI tools were used as productivity amplifiers for code optimization and accessibility audits:
-- For a full breakdown, see the `docs/ai-usage-report.md` and the `docs/technical-documentation.md`.
-
------
-
-## 👤 Contact Information
-
-  * **Name:** Hussain Albaggal
-  * **Email:** [s202253340@kfupm.edu.sa](mailto:s202253340@kfupm.edu.sa)
-  * **LinkedIn:** [Hussain Albaggal](https://www.google.com/search?q=https://www.linkedin.com/in/hussain-albaggal)
-  * **GitHub:** [Hoosn4](https://www.google.com/search?q=https://github.com/Hoosn4)
-
-<!-- end list -->
-
+- Email: [s202253340@kfupm.edu.sa](mailto:s202253340@kfupm.edu.sa)
+- LinkedIn: [Hussain Albaggal](https://www.linkedin.com/in/hussain-albaggal)
+- GitHub: [Hoosn4](https://github.com/Hoosn4)
