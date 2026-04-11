@@ -1,155 +1,204 @@
-# Technical Documentation - Assignment 2
+# Technical Documentation - Assignment 3
 
 **Author**: Hussain Albaggal  
 **Student ID**: s202253340  
-**Assignment**: SWE363 - Assignment 2 (Interactive Features)  
-**Date**: March 28, 2026
- 
+**Assignment**: SWE363 - Assignment 3 (Advanced Functionality)  
+**Date**: April 12, 2026
+
 ---
 
 ## Architecture Overview
 
-The portfolio is built as a **responsive single-page application (SPA)** with a two-column layout:
-- **Sidebar (Left)**: Fixed navigation, profile, and theme toggle
-- **Main Content (Right)**: Scrollable container with all portfolio sections
+The portfolio is built as a responsive single-page application using semantic HTML, modular CSS, and vanilla JavaScript.
 
-### Design Pattern: Component-Based Architecture
-- **CSS Variables**: Global theme management for light/dark modes
-- **Semantic HTML5**: Proper accessibility (aria-labels, label elements, semantic tags)
-- **Vanilla JavaScript**: No frameworks; pure DOM manipulation for filtering, validation, and theme persistence
+- **Sidebar**: profile summary, theme toggle, social links, and section navigation
+- **Main Content**: profile, education, experience, weather, projects, certifications, skills, and contact
 
----
+### Implementation Approach
 
-## Assignment 2 Features - Technical Implementation
-
-### 1. Dynamic Content & User Interaction
-
-#### Dynamic Greeting
-- **Location**: `#dynamicGreeting` span in About section
-- **Logic**: `updateGreeting()` function calculates local hour and sets text
-  - 5am-12pm: "Good Morning"
-  - 12pm-6pm: "Good Afternoon"  
-  - 6pm-5am: "Good Evening"
-- **Trigger**: Runs on page load; updates hourly if user visits long sessions
-
-#### Project Filtering System
-- **HTML Structure**: Filter buttons above projects with `data-filter` attributes ("all", "web", "ml")
-- **Project Categorization**: Each `.project-item` has `data-category` ("web" or "ml")
-- **JavaScript Logic**:
-  - Clicking a filter button triggers `updateProjectVisibility(category)`
-  - Adds/removes `.project-hidden` class for smooth CSS transitions
-  - Shows "No projects found" message if category is empty
-  - Active button state maintained with `.active` class
-- **CSS Animation**: `.project-hidden` uses opacity and max-height transitions (0.35s ease)
-
-#### Theme Toggle
-- **HTML**: Button in sidebar with id="themeToggle" and aria-label for accessibility
-- **Stored State**: localStorage key "portfolioTheme" (values: "light" or "dark")
-- **Button Text**: Toggles between "🌙 Dark Mode" and "☀️ Light Mode"
-- **CSS Approach**: Uses `:root` CSS variables that change in `body.dark-mode` state
-- **Error Handling**: try/catch block prevents crashes if localStorage is disabled
+- **Semantic HTML5**: sections, labels, navigation links, and accessible form structure
+- **CSS Variables**: centralized theme colors for light and dark mode
+- **Vanilla JavaScript**: state updates, API fetching, filtering, sorting, validation, and timed UI updates
 
 ---
 
-### 2. Data Handling & Storage
+## Assignment 3 Features
 
-#### localStorage Implementation
-```javascript
-function loadTheme() {
-    try {
-        const saved = localStorage.getItem('portfolioTheme');
-        if (saved === 'dark' || saved === 'light') {
-            currentTheme = saved;
-        }
-    } catch (error) {
-        console.warn('localStorage unavailable:', error);
-        currentTheme = 'light';
-    }
-}
+### 1. API Integration
 
-function saveTheme(theme) {
-    try {
-        localStorage.setItem('portfolioTheme', theme);
-    } catch (error) {
-        console.warn('Could not save theme:', error);
-    }
-}
-```
-- **Graceful Degradation**: Falls back to light mode if storage fails
-- **No Application Crash**: try/catch prevents breaking the app if storage is blocked
+#### Weather API Section
 
-#### Form Data Validation
+- **Purpose**: display current temperature data related to the portfolio location
+- **API Used**: Open-Meteo
+- **Endpoint Type**: client-side fetch request for current temperature in Dhahran, Saudi Arabia
+- **UI Elements**:
+  - `#weatherStatus`
+  - `#weatherTemperature`
+  - `#weatherUpdated`
+- **Behavior**:
+  - Shows a loading message while fetching
+  - Displays the current temperature in `°C`
+  - Shows the last update timestamp
+  - Displays a friendly fallback message if the request fails or data is missing
+
+---
+
+### 2. Complex Logic
+
+#### Project Filtering and Sorting
+
+- **Filter Controls**:
+  - Category buttons: `All`, `Web Development`, `Machine Learning`
+  - Visitor level selector: `Beginner` or `Advanced`
+- **Sort Controls**:
+  - `Newest First`
+  - `Oldest First`
+  - `Title A-Z`
+- **Data Model**:
+  - Each project card stores:
+    - `data-category`
+    - `data-date`
+    - `data-title`
+    - `data-level`
+- **Logic Flow**:
+  1. Read the current visitor level
+  2. Apply category filtering
+  3. Sort the remaining items
+  4. Re-render the visible project cards
+  5. Update the summary text and empty-state message
+
+#### Visitor-Level Display Logic
+
+- **Selector**: `#experienceLevel`
+- **Message Target**: `#projectLevelMessage`
+- **Behavior**:
+  - `Beginner` shows beginner-friendly projects and a simpler guidance message
+  - `Advanced` shows advanced projects and a more technical guidance message
+
+#### Visit Timer
+
+- **Element**: `#visitTimer`
+- **Logic**:
+  - Starts when the page loads
+  - Updates every second using `setInterval`
+  - Displays elapsed time in `HH:MM:SS`
+
+#### Contact Form Validation
+
+- **Fields Checked**:
+  - Name
+  - Email
+  - Subject
+  - Message
 - **Validation Rules**:
-  - Name: Non-empty string
-  - Email: Regex pattern `/^[^\s@]+@[^\s@]+\.[^\s@]+$/`
-  - Message: Non-empty string
-- **Real-Time Feedback**: Displays inline error/success messages below the form
-- **Message Clearing**: Errors clear when user types in form fields (input/change events)
+  - Name must not be empty
+  - Name must be at least 3 characters
+  - Email must not be empty
+  - Email must match a regex pattern
+  - Subject must not be empty
+  - Subject must be at least 5 characters
+  - Message must not be empty
+  - Message must be at least 20 characters
+- **Feedback Strategy**:
+  - Invalid inputs receive visible styling
+  - All validation errors are shown together
+  - Success message appears only when all checks pass
+  - Feedback clears when the user starts editing again
 
 ---
 
-### 3. Animations & Transitions
+### 3. State Management
 
-#### CSS Transitions Applied
-1. **Theme Switch**: `body` background and text color transition (0.3s ease)
-2. **Button Interactions**: 
-   - Hover scale: `transform: scale(1.02)` (cards)
-   - Filter buttons: `transform: translateY(-2px)` on hover
-   - Submit button: `transform: translateY(-2px)` on hover
-3. **Project Filtering**: Smooth fade out/in (opacity) with height collapse (0.35s ease)
-4. **Form Validation**: Error/success boxes appear with background color transitions
+#### Theme Persistence
 
-#### JavaScript Animation Support
-- Used Intersection Observer API for scroll-triggered section animations
-- Smooth CSS classes applied to elements as they enter viewport
-- No heavy JavaScript animations; CSS handles all transitions for performance
+- **Control**: `#themeToggle`
+- **Storage**: `localStorage`
+- **Stored Key**: `portfolioTheme`
+- **Values**: `light` or `dark`
+- **Behavior**:
+  - Reads saved theme on page load
+  - Applies the saved mode to `body`
+  - Updates the button text
+  - Updates `#themeStatus`
+  - Uses try/catch to avoid failure if storage is blocked
 
----
+#### Show/Hide Section Buttons
 
-### 4. Error Handling & User Feedback
-
-#### Form Validation Feedback
-- **Invalid Fields**: Red background with error message
-- **Success Message**: Green background with success confirmation
-- **Empty State**: "No projects found" message when filter returns no results
-
-#### User Communication Strategy
-- **Always Provide Context**: Error messages explain what's wrong
-- **Clear Next Steps**: Form clears on success; messages clear when typing resumes
-- **Accessible Design**: All interactive elements have aria-labels; form labels are semantic
+- **Buttons**:
+  - Weather section toggle
+  - Projects section toggle
+- **State Logic**:
+  - Each button controls a matching content container
+  - Visibility is tracked through `aria-expanded`
+  - Hidden sections use `.is-hidden`
+  - Button text changes between `Hide ... Section` and `Show ... Section`
 
 ---
 
-## Color Palette & Accessibility
+### 4. Performance Improvements
 
-### Light Mode
-- **Background**: `#ffffff` (white)
-- **Text**: `#1f2937` (dark gray-blue)
-- **Primary Accent**: `#3b82f6` (blue)
-- **Secondary Accent**: `#f59e0b` (amber/orange)
-- **Contrast Ratio**: 14.5:1 (AAA level)
+#### Code Cleanup
 
-### Dark Mode
-- **Background**: `#0f172a` (deep navy)
-- **Text**: `#f1f5f9` (light slate)
-- **Primary Accent**: `#60a5fa` (light blue)
-- **Secondary Accent**: `#fbbf24` (light amber)
-- **Contrast Ratio**: 14:1 (AAA level)
+- Removed unused duplicate root files that were no longer part of the live page
+- Reduced repeated DOM queries by caching frequently used form inputs
 
-**Accessibility**: All color pairs meet WCAG AA and AAA contrast standards.
+#### Rendering Efficiency
+
+- Moved section reveal styling from inline JavaScript to reusable CSS classes
+- Used `IntersectionObserver` so section reveal work only happens when needed
+- Stops observing a section after it becomes visible to reduce repeated work
+
+#### CSS Efficiency
+
+- Added `content-visibility: auto`
+- Added `contain-intrinsic-size`
+- Kept transitions and animations CSS-driven where possible
+
+---
+
+## Error Handling and User Feedback
+
+### Weather Errors
+
+- Displays: `Unable to load the weather right now. Please try again later.`
+- Clears temperature output if the API response fails
+
+### Project Empty State
+
+- Displays: `No projects found for this category.`
+- Triggered when the active level and category combination returns no visible projects
+
+### Contact Form Errors
+
+- Uses inline feedback area under the form
+- Marks invalid inputs with an error style
+- Clears old feedback when users continue typing
+
+---
+
+## Accessibility and Usability
+
+- Semantic section structure
+- Accessible labels for form fields
+- `aria-live="polite"` used in dynamic weather and project messaging
+- `aria-expanded` used for section visibility controls
+- Responsive layout supports desktop and mobile screens
 
 ---
 
 ## Browser Compatibility
 
-- Chrome/Edge 90+
-- Firefox 88+
-- Safari 14+
-- Mobile browsers (iOS Safari, Chrome Android)
+- Chrome / Edge
+- Firefox
+- Safari
+- Mobile browsers on iOS and Android
 
-## Performance Metrics
+---
 
-- **HTML**: ~5KB
-- **CSS**: ~15KB
-- **JavaScript**: ~4KB
-- **Total**: ~24KB (fast load time)
+## File Responsibilities
+
+- `index.html`: page structure and interactive control elements
+- `css/styles.css`: themes, responsive layout, animations, and component styling
+- `js/script.js`: all client-side behavior including state updates, API calls, filtering, sorting, validation, and timers
+- `docs/ai-usage-report.md`: AI usage explanation
+- `docs/technical-documentation.md`: implementation summary
