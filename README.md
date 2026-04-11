@@ -1,11 +1,11 @@
 
 # Hussain Albaggal - Software Engineering Portfolio
 
-A responsive single-page portfolio for SWE363 Assignment 2. The site presents my profile, experience, projects, certifications, skills, and contact form while demonstrating interactive front-end features such as API integration, state management, complex client-side logic, and performance-minded UI behavior.
+A responsive single-page portfolio for SWE363 Assignment 3. The site presents my profile, experience, projects, certifications, skills, and contact form while demonstrating advanced front-end features such as API integration, state management, complex client-side logic, and performance-minded UI behavior.
 
 ## Project Description
 
-This project extends my earlier portfolio into a more interactive web application using HTML, CSS, and vanilla JavaScript. It includes:
+This project builds on Assignments 1 and 2 and extends the portfolio into a more advanced web application using HTML, CSS, and vanilla JavaScript. It includes:
 
 - A live weather section powered by the Open-Meteo API
 - Project filtering, sorting, and visitor-level based display
@@ -16,7 +16,7 @@ This project extends my earlier portfolio into a more interactive web applicatio
 
 ## Assignment Coverage
 
-This portfolio now covers the main Assignment 2 areas through visible and testable features:
+This portfolio now covers the main Assignment 3 areas through visible and testable features:
 
 - Dynamic content and API integration: live weather data and time-based greeting
 - Complex logic: project filtering, sorting, visitor-level selection, and timer updates
@@ -41,7 +41,7 @@ Then open `http://localhost:8000`.
 ## Project Structure
 
 ```text
-202253340-HussainAlbaggal-assignment2/
+202253340-HussainAlbaggal-assignment3/
 ├── index.html
 ├── css/
 │   └── styles.css
