@@ -1,6 +1,104 @@
 // Main JavaScript file for Portfolio
 
+function saveTheme(theme) {
+    try {
+        localStorage.setItem('portfolioTheme', theme);
+    } catch (error) {
+        console.warn('Could not save theme to localStorage:', error);
+    }
+}
+
+function getGreetingByHour(hour) {
+    if (hour >= 5 && hour < 12) return "Good Morning, I'm Hussain Albaggal";
+    if (hour >= 12 && hour < 18) return "Good Afternoon, I'm Hussain Albaggal";
+    return "Good Evening, I'm Hussain Albaggal";
+}
+
+function formatElapsedTime(totalSeconds) {
+    const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+    const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+    const seconds = String(totalSeconds % 60).padStart(2, '0');
+    return `${hours}:${minutes}:${seconds}`;
+}
+
+function setSectionVisibility(button, content, isVisible) {
+    if (!button || !content) return;
+    content.classList.toggle('is-hidden', !isVisible);
+    button.setAttribute('aria-expanded', String(isVisible));
+
+    const sectionName = button.dataset.sectionName || 'Section';
+    button.textContent = `${isVisible ? 'Hide' : 'Show'} ${sectionName} Section`;
+}
+
+function sortProjects(items, sortValue) {
+    const sortedItems = [...items];
+
+    sortedItems.sort((firstItem, secondItem) => {
+        const firstTitle = firstItem.dataset.title || '';
+        const secondTitle = secondItem.dataset.title || '';
+        const firstDate = firstItem.dataset.date || '';
+        const secondDate = secondItem.dataset.date || '';
+
+        if (sortValue === 'date-asc') {
+            return firstDate.localeCompare(secondDate);
+        }
+
+        if (sortValue === 'title-asc') {
+            return firstTitle.localeCompare(secondTitle);
+        }
+
+        return secondDate.localeCompare(firstDate);
+    });
+
+    return sortedItems;
+}
+
+function getCategoryLabel(category) {
+    if (category === 'web') return 'web projects';
+    if (category === 'ml') return 'machine learning projects';
+    return 'all projects';
+}
+
+function getSortLabel(sortValue) {
+    if (sortValue === 'date-asc') return 'oldest first';
+    if (sortValue === 'title-asc') return 'title A-Z';
+    return 'newest first';
+}
+
+function setInputErrorState(input, hasError) {
+    if (!input) return;
+    input.classList.toggle('input-error', hasError);
+}
+
+function validateContactFormValues(values) {
+    const { name, email, subject, message } = values;
+    const errors = [];
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const fieldErrors = {
+        name: !name || name.length < 3,
+        email: !email || !emailRegex.test(email),
+        subject: !subject || subject.length < 5,
+        message: !message || message.length < 20
+    };
+
+    if (!name) errors.push('Name is required.');
+    else if (name.length < 3) errors.push('Name must be at least 3 characters long.');
+
+    if (!email) errors.push('Email is required.');
+    else if (!emailRegex.test(email)) errors.push('Please enter a valid email address.');
+
+    if (!subject) errors.push('Subject is required.');
+    else if (subject.length < 5) errors.push('Subject must be at least 5 characters long.');
+
+    if (!message) errors.push('Message is required.');
+    else if (message.length < 20) errors.push('Message must be at least 20 characters long.');
+
+    return { errors, fieldErrors };
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Navigation
     // Smooth scrolling for navigation links
     const sidebarNav = document.querySelector('.sidebar-nav');
     if (sidebarNav) {
@@ -17,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Theme toggling and persistence (Assignment 2)
+    // Theme state management (Assignment 3)
     const themeToggleBtn = document.getElementById('themeToggle');
     let currentTheme = 'light';
 
@@ -30,14 +128,6 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             console.warn('localStorage unavailable:', error);
             currentTheme = 'light';
-        }
-    }
-
-    function saveTheme(theme) {
-        try {
-            localStorage.setItem('portfolioTheme', theme);
-        } catch (error) {
-            console.warn('Could not save theme to localStorage:', error);
         }
     }
 
@@ -65,10 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const greetingElement = document.getElementById('dynamicGreeting');
         if (!greetingElement) return;
         const hour = new Date().getHours();
-        let greeting = "Good Day, I'm Hussain Albaggal";
-        if (hour >= 5 && hour < 12) greeting = "Good Morning, I'm Hussain Albaggal";
-        else if (hour >= 12 && hour < 18) greeting = "Good Afternoon, I'm Hussain Albaggal";
-        else greeting = "Good Evening, I'm Hussain Albaggal";
+        const greeting = getGreetingByHour(hour);
         greetingElement.textContent = greeting;
     }
     updateGreeting();
@@ -76,13 +163,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Visit timer logic
     const visitTimer = document.getElementById('visitTimer');
     const visitStartedAt = Date.now();
-
-    function formatElapsedTime(totalSeconds) {
-        const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-        const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
-        const seconds = String(totalSeconds % 60).padStart(2, '0');
-        return `${hours}:${minutes}:${seconds}`;
-    }
 
     function updateVisitTimer() {
         if (!visitTimer) return;
@@ -191,15 +271,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Show/hide section state
     const sectionToggleButtons = document.querySelectorAll('.section-toggle-btn');
 
-    function setSectionVisibility(button, content, isVisible) {
-        if (!button || !content) return;
-        content.classList.toggle('is-hidden', !isVisible);
-        button.setAttribute('aria-expanded', String(isVisible));
-
-        const sectionName = button.dataset.sectionName || 'Section';
-        button.textContent = `${isVisible ? 'Hide' : 'Show'} ${sectionName} Section`;
-    }
-
     sectionToggleButtons.forEach(button => {
         const targetId = button.dataset.target;
         const content = targetId ? document.getElementById(targetId) : null;
@@ -224,41 +295,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let activeCategory = 'all';
     let activeSort = 'date-desc';
     let activeLevel = 'beginner';
-
-    function sortProjects(items, sortValue) {
-        const sortedItems = [...items];
-
-        sortedItems.sort((firstItem, secondItem) => {
-            const firstTitle = firstItem.dataset.title || '';
-            const secondTitle = secondItem.dataset.title || '';
-            const firstDate = firstItem.dataset.date || '';
-            const secondDate = secondItem.dataset.date || '';
-
-            if (sortValue === 'date-asc') {
-                return firstDate.localeCompare(secondDate);
-            }
-
-            if (sortValue === 'title-asc') {
-                return firstTitle.localeCompare(secondTitle);
-            }
-
-            return secondDate.localeCompare(firstDate);
-        });
-
-        return sortedItems;
-    }
-
-    function getCategoryLabel(category) {
-        if (category === 'web') return 'web projects';
-        if (category === 'ml') return 'machine learning projects';
-        return 'all projects';
-    }
-
-    function getSortLabel(sortValue) {
-        if (sortValue === 'date-asc') return 'oldest first';
-        if (sortValue === 'title-asc') return 'title A-Z';
-        return 'newest first';
-    }
 
     function renderProjects() {
         const filteredProjects = projectItems.filter(item => {
@@ -330,11 +366,6 @@ document.addEventListener('DOMContentLoaded', function() {
         messageInput
     ].filter(Boolean);
 
-    function setInputErrorState(input, hasError) {
-        if (!input) return;
-        input.classList.toggle('input-error', hasError);
-    }
-
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -346,32 +377,19 @@ document.addEventListener('DOMContentLoaded', function() {
             const subject = subjectInput.value.trim();
             const message = messageInput.value.trim();
 
-            const errors = [];
             contactInputs.forEach(input => setInputErrorState(input, false));
 
-            if (!name) errors.push('Name is required.');
-            if (!email) errors.push('Email is required.');
-            if (!subject) errors.push('Subject is required.');
-            if (!message) errors.push('Message is required.');
+            const { errors, fieldErrors } = validateContactFormValues({
+                name,
+                email,
+                subject,
+                message
+            });
 
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (email && !emailRegex.test(email)) {
-                errors.push('Please enter a valid email address.');
-            }
-            if (name && name.length < 3) {
-                errors.push('Name must be at least 3 characters long.');
-            }
-            if (subject && subject.length < 5) {
-                errors.push('Subject must be at least 5 characters long.');
-            }
-            if (message && message.length < 20) {
-                errors.push('Message must be at least 20 characters long.');
-            }
-
-            if (!name || (name && name.length < 3)) setInputErrorState(nameInput, true);
-            if (!email || (email && !emailRegex.test(email))) setInputErrorState(emailInput, true);
-            if (!subject || (subject && subject.length < 5)) setInputErrorState(subjectInput, true);
-            if (!message || (message && message.length < 20)) setInputErrorState(messageInput, true);
+            setInputErrorState(nameInput, fieldErrors.name);
+            setInputErrorState(emailInput, fieldErrors.email);
+            setInputErrorState(subjectInput, fieldErrors.subject);
+            setInputErrorState(messageInput, fieldErrors.message);
 
             if (errors.length > 0) {
                 formFeedback.classList.add('error');

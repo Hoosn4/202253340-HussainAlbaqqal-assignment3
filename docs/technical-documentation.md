@@ -70,10 +70,11 @@ The portfolio is built as a responsive single-page application using semantic HT
 #### Visitor-Level Display Logic
 
 - **Selector**: `#experienceLevel`
-- **Message Target**: `#projectLevelMessage`
+- **Summary Target**: `#projectResultsSummary`
 - **Behavior**:
-  - `Beginner` shows beginner-friendly projects and a simpler guidance message
-  - `Advanced` shows advanced projects and a more technical guidance message
+  - `Beginner` shows beginner-friendly projects
+  - `Advanced` shows advanced projects
+  - Results summary text updates after each level/filter/sort change
 
 #### Visit Timer
 
@@ -119,14 +120,12 @@ The portfolio is built as a responsive single-page application using semantic HT
   - Reads saved theme on page load
   - Applies the saved mode to `body`
   - Updates the button text
-  - Updates `#themeStatus`
   - Uses try/catch to avoid failure if storage is blocked
 
 #### Show/Hide Section Buttons
 
 - **Buttons**:
-  - Weather section toggle
-  - Projects section toggle
+  - Profile, Education, Experience, Projects, Certifications, Skills, and Contact toggles
 - **State Logic**:
   - Each button controls a matching content container
   - Visibility is tracked through `aria-expanded`
@@ -160,7 +159,7 @@ The portfolio is built as a responsive single-page application using semantic HT
 
 ### Weather Errors
 
-- Displays: `Unable to load the weather right now. Please try again later.`
+- Displays: `Weather unavailable`
 - Clears temperature output if the API response fails
 
 ### Project Empty State
