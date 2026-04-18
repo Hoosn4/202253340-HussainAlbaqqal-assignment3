@@ -1,42 +1,36 @@
 
 # Hussain Albaggal - Software Engineering Portfolio
 
-A responsive single-page portfolio for SWE363 Assignment 3. The site presents my profile, experience, projects, certifications, skills, and contact form while demonstrating advanced front-end features such as API integration, state management, complex client-side logic, and performance-minded UI behavior.
+A responsive single-page portfolio for SWE363 Assignment 3. This project shows my profile, education, experience, projects, certifications, technical skills, and contact form using HTML, CSS, and vanilla JavaScript.
 
 ## Project Description
 
-This project builds on Assignments 1 and 2 and extends the portfolio into a more advanced web application using HTML, CSS, and vanilla JavaScript. It includes:
+This assignment extends my previous portfolio work with more advanced front-end functionality and cleaner user interactions.
 
-- A live weather section powered by the Open-Meteo API
-- Project filtering, sorting, and visitor-level based display
-- Persistent light/dark mode using `localStorage`
-- Show/hide section controls for state management
-- A visit timer and dynamic greeting
-- A contact form with stronger validation and user-friendly feedback
+Main implemented features:
 
-## Assignment Coverage
+- Dynamic greeting based on current time
+- Visit timer that updates every second
+- Weather API integration for Dhahran (temperature + last update)
+- Project filtering by category and visitor level
+- Project sorting by date and title
+- Persistent theme mode (light/dark) with localStorage
+- Show/hide section state controls
+- Contact form validation with inline feedback
 
-This portfolio now covers the main Assignment 3 areas through visible and testable features:
+## Setup Instructions (Run Locally)
 
-- Dynamic content and API integration: live weather data and time-based greeting
-- Complex logic: project filtering, sorting, visitor-level selection, and timer updates
-- State management: persistent theme mode and show/hide section buttons
-- Error handling: API fallback message, empty project state, and form validation feedback
-- Performance: reduced repeated DOM lookups, CSS-based section reveal, and lighter runtime updates
+### Option 1: Direct open
 
-## Setup Instructions
+Open index.html in any modern browser.
 
-### Option 1: Open directly
-
-Open `index.html` in a modern browser.
-
-### Option 2: Run with a local server
+### Option 2: Local server
 
 ```bash
 python -m http.server 8000
 ```
 
-Then open `http://localhost:8000`.
+Then open http://localhost:8000.
 
 ## Project Structure
 
@@ -53,32 +47,37 @@ Then open `http://localhost:8000`.
 └── README.md
 ```
 
-## Main Features
+## Short AI Use Summary
 
-- Dynamic content: time-based greeting, live temperature, and visit timer
-- API integration: current weather for Dhahran from Open-Meteo
-- Complex logic: project filtering, sorting, and visitor-level selection
-- State management: theme persistence and show/hide section controls
-- Error handling: weather fallback message, empty-state project message, and contact form validation
-- Performance: reduced repeated DOM lookups, CSS-based reveal animations, and section rendering optimization
+I used AI tools for code generation support, debugging ideas, UI/UX refinement, and documentation improvements. I manually reviewed and modified all generated suggestions before keeping them.
 
-## How To Test
+Detailed report: [docs/ai-usage-report.md](docs/ai-usage-report.md)
 
-- Theme toggle: switch between light and dark mode, then refresh the page to confirm the theme stays saved
-- Weather section: check that the temperature appears, or a friendly fallback message appears if the API fails
-- Projects section: choose `Beginner` or `Advanced`, apply a category filter, and then change the sort option
-- Section visibility: click `Hide Weather Section` or `Hide Projects Section`, then show them again
-- Contact form: submit empty or invalid fields to see validation errors, then submit valid input to see the success message
+## Code Quality Notes
 
-## AI Use Summary
+- Code is organized by responsibility: structure in index.html, styling in css/styles.css, and behavior in js/script.js
+- JavaScript is grouped into logical feature blocks (theme, greeting, timer, weather, filtering, form, animation)
+- Important behaviors include inline comments for readability
+- Unused visual noise was removed from weather UI, and section layout was refined for consistency
+- Links in README/docs are reviewed to avoid broken references
 
-AI tools were used to speed up implementation, improve validation logic, refine UI messaging, and support documentation. All generated suggestions were reviewed and adjusted manually before being kept in the project.
+## Documentation Files
 
-For the full explanation, see [docs/ai-usage-report.md](docs/ai-usage-report.md).
+- Main overview and run instructions: README.md
+- AI usage details: docs/ai-usage-report.md
+- Technical implementation details: docs/technical-documentation.md
 
-## Live Deployment
+## Optional Live Deployment
 
-No live deployment link is included yet.
+Live link: Not added yet (optional for this assignment).
+
+## Submission Process Checklist
+
+1. Create a new GitHub repository for this assignment.
+2. Push the final project files to the repository.
+3. Re-test core features (theme, weather, filters, form validation).
+4. Confirm README.md, docs/ai-usage-report.md, and technical documentation are updated.
+5. Submit the repository link through Blackboard.
 
 ## Contact
 

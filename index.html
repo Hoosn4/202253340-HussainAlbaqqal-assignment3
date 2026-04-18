@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hussain Albaggal | Software Engineer Portfolio</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -20,7 +22,12 @@
                 </div>
                 <h2 class="profile-name">Hussain Albaggal</h2>
             </div>
-            <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle dark/light theme">🌙 Dark Mode</button>
+            <button id="themeToggle" class="theme-toggle-btn">🌙 Dark Mode</button>
+
+            <div class="visit-timer-card sidebar-timer-card" aria-label="Time spent on this portfolio">
+                <span class="visit-timer-label">Time spent</span>
+                <span id="visitTimer" class="visit-timer-value">00:00:00</span>
+            </div>
 
             <div class="social-links">
                 <a href="https://github.com/Hoosn4" class="social-icon" title="GitHub" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
@@ -32,13 +39,21 @@
                     <li><a href="#home"><i class="fas fa-user"></i> <span>Profile</span></a></li>
                     <li><a href="#resume"><i class="fas fa-graduation-cap"></i> <span>Education</span></a></li>
                     <li><a href="#experience"><i class="fas fa-briefcase"></i> <span>Experience</span></a></li>
-                    <li><a href="#weather"><i class="fas fa-cloud-sun"></i> <span>Weather</span></a></li>
                     <li><a href="#projects"><i class="fas fa-code"></i> <span>Projects</span></a></li>
                     <li><a href="#certifications"><i class="fas fa-certificate"></i> <span>Certifications</span></a></li>
                     <li><a href="#skills"><i class="fas fa-wrench"></i> <span>Skills</span></a></li>
                     <li><a href="#contact"><i class="fas fa-envelope"></i> <span>Contact</span></a></li>
                 </ul>
             </nav>
+
+            <div class="sidebar-weather-card" aria-label="Current weather">
+                <p id="weatherTemperature" class="sidebar-weather-value">--</p>
+                <div id="weatherStatus" class="sidebar-weather-status" aria-live="polite">Loading temperature...</div>
+                <p class="sidebar-weather-meta">
+                    <span id="weatherUpdated" class="sidebar-weather-updated"></span>
+                    <span class="sidebar-weather-location">Dhahran, Saudi Arabia</span>
+                </p>
+            </div>
 
             <div class="contact-info">
                 <p><strong>Email:</strong> <a href="mailto:s202253340@kfupm.edu.sa">s202253340@kfupm.edu.sa</a></p>
@@ -49,71 +64,57 @@
         <main class="main-content">
             <section class="about-me-section" id="home">
                 <h2 id="dynamicGreeting" class="greeting-header">Good Morning, I'm Hussain Albaggal</h2>
-                <p class="tagline">Software Engineering Student | 3D Reconstruction | Full-Stack Development</p>
-                <div class="visit-timer-card">
-                    <span class="visit-timer-label">Time spent on this portfolio</span>
-                    <span id="visitTimer" class="visit-timer-value">00:00:00</span>
+                <button class="section-toggle-btn" type="button" data-target="homeContent" data-section-name="Profile" aria-expanded="true">Hide Profile Section</button>
+                <div id="homeContent" class="toggle-section-content">
+                    <p class="tagline">Software Engineering Student | 3D Reconstruction | Full-Stack Development</p>
+                    <p>
+                        I am a Software Engineering student at KFUPM specializing in Deep Learning and Full-Stack Development. 
+                        Currently, I serve as an Undergraduate Research Assistant implementing the Fast3R model for 3D reconstruction, 
+                        applying advanced geometric modeling and Python-based deep learning workflows.
+                    </p>
                 </div>
-                <p id="themeStatus" class="theme-status">Current theme: Light mode</p>
-                <p>
-                    I am a Software Engineering student at KFUPM specializing in Deep Learning and Full-Stack Development. 
-                    Currently, I serve as an Undergraduate Research Assistant implementing the Fast3R model for 3D reconstruction, 
-                    applying advanced geometric modeling and Python-based deep learning workflows.
-                </p>
             </section>
 
             <section class="education-section" id="resume">
                 <h2>Education</h2>
-                <div class="education-item">
-                    <h3>King Fahd University of Petroleum and Minerals (KFUPM)</h3>
-                    <p><strong>Bachelor of Science in Software Engineering</strong> | Dhahran, SA</p>
-                    <p>Expected Graduation: May 2027</p>
+                <button class="section-toggle-btn" type="button" data-target="educationContent" data-section-name="Education" aria-expanded="true">Hide Education Section</button>
+                <div id="educationContent" class="toggle-section-content">
+                    <div class="education-item">
+                        <h3>King Fahd University of Petroleum and Minerals (KFUPM)</h3>
+                        <p><strong>Bachelor of Science in Software Engineering</strong> | Dhahran, SA</p>
+                        <p>Expected Graduation: May 2027</p>
+                    </div>
                 </div>
             </section>
 
             <section class="experience-section" id="experience">
                 <h2>Experience</h2>
-                <div class="experience-item">
-                    <h3>Undergraduate Research Assistant</h3>
-                    <p><strong>KFUPM</strong> | Jan 2026 – Present</p>
-                    <ul>
-                        <li>Implementing the Fast3R model to construct 3D images from 2D input images using Python.</li>
-                        <li>Utilizing advanced image segmentation and geometric modeling to enhance reconstruction accuracy.</li>
-                    </ul>
-                </div>
-
-                <div class="experience-item">
-                    <h3>Financial Representative & PR</h3>
-                    <p><strong>GSR Event (Creative Minds Hub)</strong> | Jan 2025 – Present</p>
-                    <ul>
-                        <li>Liaison between the event team and Student Affairs; successfully secured funding and managed budget allocation.</li>
-                        <li>Executed marketing and PR strategies to maximize student engagement and branding.</li>
-                        <li>Developed creative media assets as Content Creator (2024) to drive hub visibility.</li>
-                    </ul>
-                </div>
-            </section>
-
-            <section class="weather-section" id="weather">
-                <h2>Current Weather</h2>
-                <button class="section-toggle-btn" type="button" data-target="weatherContent" aria-expanded="true">Hide Weather Section</button>
-                <div id="weatherContent" class="toggle-section-content">
-                <div class="weather-card">
-                    <p class="weather-location">Dhahran, Saudi Arabia</p>
-                    <div id="weatherStatus" class="weather-status" aria-live="polite">Loading current temperature...</div>
-                    <div class="weather-metrics">
-                        <div class="weather-metric">
-                            <span class="weather-label">Temperature</span>
-                            <span id="weatherTemperature" class="weather-value">--</span>
-                        </div>
+                <button class="section-toggle-btn" type="button" data-target="experienceContent" data-section-name="Experience" aria-expanded="true">Hide Experience Section</button>
+                <div id="experienceContent" class="toggle-section-content">
+                    <div class="experience-item">
+                        <h3>Undergraduate Research Assistant</h3>
+                        <p><strong>KFUPM</strong> | Jan 2026 – Present</p>
+                        <ul>
+                            <li>Implementing the Fast3R model to construct 3D images from 2D input images using Python.</li>
+                            <li>Utilizing advanced image segmentation and geometric modeling to enhance reconstruction accuracy.</li>
+                        </ul>
                     </div>
-                    <p id="weatherUpdated" class="weather-updated"></p>
-                </div>
+
+                    <div class="experience-item">
+                        <h3>Financial Representative & PR</h3>
+                        <p><strong>GSR Event (Creative Minds Hub)</strong> | Jan 2025 – Present</p>
+                        <ul>
+                            <li>Liaison between the event team and Student Affairs; successfully secured funding and managed budget allocation.</li>
+                            <li>Executed marketing and PR strategies to maximize student engagement and branding.</li>
+                            <li>Developed creative media assets as Content Creator (2024) to drive hub visibility.</li>
+                        </ul>
+                    </div>
                 </div>
             </section>
 
             <section class="projects-section" id="projects">
                 <h2>Projects</h2>
-                <button class="section-toggle-btn" type="button" data-target="projectsContent" aria-expanded="true">Hide Projects Section</button>
+                <button class="section-toggle-btn" type="button" data-target="projectsContent" data-section-name="Projects" aria-expanded="true">Hide Projects Section</button>
                 <div id="projectsContent" class="toggle-section-content">
                 <div class="project-level-panel">
                     <label class="project-sort-label" for="experienceLevel">
@@ -123,9 +124,6 @@
                             <option value="advanced">Advanced</option>
                         </select>
                     </label>
-                    <div id="projectLevelMessage" class="project-level-message" aria-live="polite">
-                        Beginner mode highlights portfolio pieces with clear structure and practical outcomes.
-                    </div>
                 </div>
 
                 <div class="project-controls">
@@ -177,57 +175,87 @@
                     <p><strong>Tech:</strong> AFL++, LLVM, Linux</p>
                     <p>Conducted greybox fuzzing to identify multiple logic bugs by analyzing code coverage on specialized software.</p>
                 </div>
+                <div class="project-item" data-category="web" data-date="2026-04" data-title="Campus Event Booking Portal" data-level="advanced">
+                    <h3>Campus Event Booking Portal</h3>
+                    <p><strong>Date:</strong> April 2026</p>
+                    <p><strong>Level:</strong> Advanced</p>
+                    <p><strong>Tech:</strong> Next.js, PostgreSQL, Prisma</p>
+                    <p>Built a role-based event booking system with admin analytics, seat-capacity rules, and transactional booking logic.</p>
+                </div>
+                <div class="project-item" data-category="ml" data-date="2024-11" data-title="Student Performance Forecasting" data-level="beginner">
+                    <h3>Student Performance Forecasting</h3>
+                    <p><strong>Date:</strong> November 2024</p>
+                    <p><strong>Level:</strong> Beginner Friendly</p>
+                    <p><strong>Tech:</strong> Python, Pandas, Scikit-learn</p>
+                    <p>Created a baseline ML pipeline to predict pass/fail outcomes and visualize feature impact for academic support planning.</p>
+                </div>
+                <div class="project-item" data-category="web" data-date="2024-06" data-title="Personal Finance Tracker" data-level="beginner">
+                    <h3>Personal Finance Tracker</h3>
+                    <p><strong>Date:</strong> June 2024</p>
+                    <p><strong>Level:</strong> Beginner Friendly</p>
+                    <p><strong>Tech:</strong> HTML, CSS, JavaScript, LocalStorage</p>
+                    <p>Designed a responsive budgeting tool with category filters, monthly summaries, and persistent client-side transaction history.</p>
+                </div>
                 </div>
                 </div>
             </section>
 
             <section class="certifications-section" id="certifications">
                 <h2>Certifications</h2>
-                <div class="education-item">
-                    <p>• <strong>Agile Project Management</strong> – Google (Feb 2026)</p>
-                    <p>• <strong>Deep Learning with PyTorch: Image Segmentation</strong> – Coursera (Feb 2026)</p>
-                    <p>• <strong>3D Reconstruction - Single Viewpoint</strong> – Columbia University (Expected Mar 2026)</p>
-                    <p>• <strong>Google Project Management Professional</strong> – Coursera (Expected Apr 2026)</p>
+                <button class="section-toggle-btn" type="button" data-target="certificationsContent" data-section-name="Certifications" aria-expanded="true">Hide Certifications Section</button>
+                <div id="certificationsContent" class="toggle-section-content">
+                    <div class="education-item">
+                        <p>• <strong>Agile Project Management</strong> – Google (Feb 2026)</p>
+                        <p>• <strong>Deep Learning with PyTorch: Image Segmentation</strong> – Coursera (Feb 2026)</p>
+                        <p>• <strong>3D Reconstruction - Single Viewpoint</strong> – Columbia University (Expected Mar 2026)</p>
+                        <p>• <strong>Google Project Management Professional</strong> – Coursera (Expected Apr 2026)</p>
+                    </div>
                 </div>
             </section>
 
             <section class="technical-skills-section" id="skills">
                 <h2>Technical Skills</h2>
-                <div class="skill-category">
-                    <h3>Languages</h3>
-                    <p>Java, Python, JavaScript, C, HTML/CSS, SQL (MySQL, MongoDB)</p>
-                </div>
-                <div class="skill-category">
-                    <h3>Frameworks/Libraries</h3>
-                    <p>PyTorch, Node.js, React, Pandas, NumPy, Scikit-learn</p>
-                </div>
-                <div class="skill-category">
-                    <h3>Tools</h3>
-                    <p>Git, GitHub, Linux, AFL++, LLVM, VS Code, Agile/Scrum, LaTeX</p>
+                <button class="section-toggle-btn" type="button" data-target="skillsContent" data-section-name="Skills" aria-expanded="true">Hide Skills Section</button>
+                <div id="skillsContent" class="toggle-section-content">
+                    <div class="skill-category">
+                        <h3>Languages</h3>
+                        <p>Java, Python, JavaScript, C, HTML/CSS, SQL (MySQL, MongoDB)</p>
+                    </div>
+                    <div class="skill-category">
+                        <h3>Frameworks/Libraries</h3>
+                        <p>PyTorch, Node.js, React, Pandas, NumPy, Scikit-learn</p>
+                    </div>
+                    <div class="skill-category">
+                        <h3>Tools</h3>
+                        <p>Git, GitHub, Linux, AFL++, LLVM, VS Code, Agile/Scrum, LaTeX</p>
+                    </div>
                 </div>
             </section>
 
             <section class="contact-section" id="contact">
                 <h2>Contact</h2>
-                <form id="contactForm" class="contact-info-section" novalidate>
-                    <label for="name" class="form-field-label">Name
-                        <input type="text" id="name" placeholder="Name" required class="form-input">
-                    </label>
-                    <label for="email" class="form-field-label">Email
-                        <input type="email" id="email" placeholder="Email" required class="form-input">
-                    </label>
-                    <label for="subject" class="form-field-label">Subject
-                        <input type="text" id="subject" placeholder="Subject" required class="form-input">
-                    </label>
-                    <label for="message" class="form-field-label">Your Message
-                        <textarea id="message" placeholder="Your Message" rows="5" required class="form-input"></textarea>
-                    </label>
-                    <div id="formFeedback" class="form-feedback"></div>
-                    <button type="submit" class="form-submit-button">Send Message</button>
-                </form>
+                <button class="section-toggle-btn" type="button" data-target="contactContent" data-section-name="Contact" aria-expanded="true">Hide Contact Section</button>
+                <div id="contactContent" class="toggle-section-content">
+                    <form id="contactForm" class="contact-info-section" novalidate>
+                        <label for="name" class="form-field-label">Name
+                            <input type="text" id="name" placeholder="Name" required class="form-input">
+                        </label>
+                        <label for="email" class="form-field-label">Email
+                            <input type="email" id="email" placeholder="Email" required class="form-input">
+                        </label>
+                        <label for="subject" class="form-field-label">Subject
+                            <input type="text" id="subject" placeholder="Subject" required class="form-input">
+                        </label>
+                        <label for="message" class="form-field-label">Your Message
+                            <textarea id="message" placeholder="Your Message" rows="5" required class="form-input"></textarea>
+                        </label>
+                        <div id="formFeedback" class="form-feedback"></div>
+                        <button type="submit" class="form-submit-button">Send Message</button>
+                    </form>
+                </div>
             </section>
         </main>
     </div>
-    <script src="js/script.js"></script>
+    <script src="js/script.js" defer></script>
 </body>
 </html>

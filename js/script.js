@@ -2,23 +2,23 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     // Smooth scrolling for navigation links
-    const navLinks = document.querySelectorAll('.sidebar-nav a');
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            if (this.getAttribute('href').startsWith('#')) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const targetSection = document.querySelector(targetId);
-                if (targetSection) {
-                    targetSection.scrollIntoView({ behavior: 'smooth' });
-                }
+    const sidebarNav = document.querySelector('.sidebar-nav');
+    if (sidebarNav) {
+        sidebarNav.addEventListener('click', (e) => {
+            const link = e.target.closest('a[href^="#"]');
+            if (!link) return;
+
+            e.preventDefault();
+            const targetId = link.getAttribute('href');
+            const targetSection = targetId ? document.querySelector(targetId) : null;
+            if (targetSection) {
+                targetSection.scrollIntoView({ behavior: 'smooth' });
             }
         });
-    });
+    }
     
     // Theme toggling and persistence (Assignment 2)
     const themeToggleBtn = document.getElementById('themeToggle');
-    const themeStatus = document.getElementById('themeStatus');
     let currentTheme = 'light';
 
     function loadTheme() {
@@ -46,9 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.classList.toggle('light-mode', theme === 'light');
         if (themeToggleBtn) {
             themeToggleBtn.textContent = theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
-        }
-        if (themeStatus) {
-            themeStatus.textContent = `Current theme: ${theme === 'dark' ? 'Dark mode' : 'Light mode'}`;
         }
         saveTheme(theme);
     }
@@ -100,6 +97,53 @@ document.addEventListener('DOMContentLoaded', function() {
     const weatherStatus = document.getElementById('weatherStatus');
     const weatherTemperature = document.getElementById('weatherTemperature');
     const weatherUpdated = document.getElementById('weatherUpdated');
+    const WEATHER_CACHE_KEY = 'portfolioWeatherCacheV1';
+    const WEATHER_CACHE_TTL_MS = 10 * 60 * 1000;
+
+    function setWeatherLoading() {
+        weatherStatus.classList.remove('error');
+        weatherStatus.textContent = 'Loading temperature...';
+        weatherTemperature.textContent = '--';
+        weatherUpdated.textContent = '';
+    }
+
+    function renderWeather(temperature, updatedAt) {
+        weatherTemperature.textContent = `${temperature}°C`;
+        weatherStatus.textContent = '';
+        weatherUpdated.textContent = `Last updated: ${updatedAt.toLocaleString()}`;
+    }
+
+    function readWeatherCache() {
+        try {
+            const rawCache = localStorage.getItem(WEATHER_CACHE_KEY);
+            if (!rawCache) return null;
+
+            const parsed = JSON.parse(rawCache);
+            const isFresh = parsed && typeof parsed.cachedAt === 'number' && Date.now() - parsed.cachedAt < WEATHER_CACHE_TTL_MS;
+            const hasData = parsed && typeof parsed.temperature === 'number' && parsed.updatedAt;
+
+            if (isFresh && hasData) {
+                return parsed;
+            }
+
+            return null;
+        } catch {
+            return null;
+        }
+    }
+
+    function writeWeatherCache(temperature, updatedAt) {
+        try {
+            const cachePayload = {
+                temperature,
+                updatedAt,
+                cachedAt: Date.now()
+            };
+            localStorage.setItem(WEATHER_CACHE_KEY, JSON.stringify(cachePayload));
+        } catch {
+            // Ignore cache writes if storage is unavailable.
+        }
+    }
 
     async function loadWeather() {
         if (!weatherStatus || !weatherTemperature || !weatherUpdated) return;
@@ -107,10 +151,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const weatherApiUrl = 'https://api.open-meteo.com/v1/forecast?latitude=26.2361&longitude=50.0393&current=temperature_2m&timezone=auto';
 
         try {
-            weatherStatus.className = 'weather-status';
-            weatherStatus.textContent = 'Loading current temperature...';
-            weatherTemperature.textContent = '--';
-            weatherUpdated.textContent = '';
+            const cachedWeather = readWeatherCache();
+            if (cachedWeather) {
+                renderWeather(cachedWeather.temperature, new Date(cachedWeather.updatedAt));
+                return;
+            }
+
+            setWeatherLoading();
 
             const response = await fetch(weatherApiUrl);
             if (!response.ok) {
@@ -118,8 +165,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             const data = await response.json();
-            const currentWeather = data && data.current;
-            const temperature = currentWeather && typeof currentWeather.temperature_2m === 'number'
+            const currentWeather = data?.current;
+            const temperature = typeof currentWeather?.temperature_2m === 'number'
                 ? currentWeather.temperature_2m
                 : null;
 
@@ -127,15 +174,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error('Temperature data was not available in the API response.');
             }
 
-            weatherTemperature.textContent = `${temperature}°C`;
-            weatherStatus.textContent = '';
-
             const updatedAt = currentWeather.time ? new Date(currentWeather.time) : new Date();
-            weatherUpdated.textContent = `Last updated: ${updatedAt.toLocaleString()}`;
+            renderWeather(temperature, updatedAt);
+            writeWeatherCache(temperature, updatedAt.toISOString());
         } catch (error) {
             console.error('Unable to load weather data:', error);
-            weatherStatus.className = 'weather-status error';
-            weatherStatus.textContent = 'Unable to load the weather right now. Please try again later.';
+            weatherStatus.classList.add('error');
+            weatherStatus.textContent = 'Weather unavailable';
             weatherTemperature.textContent = '--';
             weatherUpdated.textContent = '';
         }
@@ -151,12 +196,12 @@ document.addEventListener('DOMContentLoaded', function() {
         content.classList.toggle('is-hidden', !isVisible);
         button.setAttribute('aria-expanded', String(isVisible));
 
-        const sectionName = button.dataset.target === 'weatherContent' ? 'Weather' : 'Projects';
+        const sectionName = button.dataset.sectionName || 'Section';
         button.textContent = `${isVisible ? 'Hide' : 'Show'} ${sectionName} Section`;
     }
 
     sectionToggleButtons.forEach(button => {
-        const targetId = button.getAttribute('data-target');
+        const targetId = button.dataset.target;
         const content = targetId ? document.getElementById(targetId) : null;
         if (!content) return;
 
@@ -176,7 +221,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const projectSort = document.getElementById('projectSort');
     const projectResultsSummary = document.getElementById('projectResultsSummary');
     const experienceLevel = document.getElementById('experienceLevel');
-    const projectLevelMessage = document.getElementById('projectLevelMessage');
     let activeCategory = 'all';
     let activeSort = 'date-desc';
     let activeLevel = 'beginner';
@@ -185,10 +229,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const sortedItems = [...items];
 
         sortedItems.sort((firstItem, secondItem) => {
-            const firstTitle = firstItem.getAttribute('data-title') || '';
-            const secondTitle = secondItem.getAttribute('data-title') || '';
-            const firstDate = firstItem.getAttribute('data-date') || '';
-            const secondDate = secondItem.getAttribute('data-date') || '';
+            const firstTitle = firstItem.dataset.title || '';
+            const secondTitle = secondItem.dataset.title || '';
+            const firstDate = firstItem.dataset.date || '';
+            const secondDate = secondItem.dataset.date || '';
 
             if (sortValue === 'date-asc') {
                 return firstDate.localeCompare(secondDate);
@@ -216,21 +260,10 @@ document.addEventListener('DOMContentLoaded', function() {
         return 'newest first';
     }
 
-    function updateProjectLevelMessage(level) {
-        if (!projectLevelMessage) return;
-
-        if (level === 'advanced') {
-            projectLevelMessage.textContent = 'Advanced mode highlights projects with heavier design patterns, systems thinking, and testing depth.';
-            return;
-        }
-
-        projectLevelMessage.textContent = 'Beginner mode highlights portfolio pieces with clear structure and practical outcomes.';
-    }
-
     function renderProjects() {
         const filteredProjects = projectItems.filter(item => {
-            const itemCategory = item.getAttribute('data-category');
-            const itemLevel = item.getAttribute('data-level');
+            const itemCategory = item.dataset.category;
+            const itemLevel = item.dataset.level;
             const matchesCategory = activeCategory === 'all' || itemCategory === activeCategory;
             const matchesLevel = itemLevel === activeLevel;
             return matchesCategory && matchesLevel;
@@ -241,10 +274,12 @@ document.addEventListener('DOMContentLoaded', function() {
         projectItems.forEach(item => item.classList.add('project-hidden'));
 
         if (projectList) {
+            const fragment = document.createDocumentFragment();
             sortedProjects.forEach(item => {
                 item.classList.remove('project-hidden');
-                projectList.appendChild(item);
+                fragment.appendChild(item);
             });
+            projectList.appendChild(fragment);
         }
 
         if (projectEmptyState) {
@@ -260,7 +295,7 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.addEventListener('click', () => {
             filterButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            activeCategory = btn.getAttribute('data-filter') || 'all';
+            activeCategory = btn.dataset.filter || 'all';
             renderProjects();
         });
     });
@@ -273,10 +308,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (experienceLevel) {
-        updateProjectLevelMessage(experienceLevel.value);
         experienceLevel.addEventListener('change', () => {
             activeLevel = experienceLevel.value;
-            updateProjectLevelMessage(activeLevel);
             renderProjects();
         });
     }
